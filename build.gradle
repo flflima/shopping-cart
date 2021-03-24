@@ -1,12 +1,19 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.31'
+    id 'application'
 }
 
+mainClassName = 'br.com.dev.shoppingcart.MainKt'
 group = 'br.com.dev'
 version = '1.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin/'
+    test.java.srcDirs += 'src/test/kotlin/'
 }
 
 dependencies {
@@ -27,4 +34,17 @@ compileKotlin {
 
 compileTestKotlin {
     kotlinOptions.jvmTarget = '11'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': mainClassName
+        )
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }

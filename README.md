@@ -9,6 +9,7 @@ A simple REST application with Kotlin
 - [Gradle](https://gradle.org/)
 - [Mockk](https://mockk.io/)
 - [AssertJ](https://joel-costigliola.github.io/assertj/index.html)
+- [Koin](https://insert-koin.io/)
 
 ## Building Application
 

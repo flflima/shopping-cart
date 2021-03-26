@@ -4,6 +4,10 @@ import br.com.dev.shoppingcart.model.Product
 
 object ProductMock {
 
+    fun getOneProduct() = listOf(
+        Product("Camiseta", 100.00, "", "Vestuário")
+    )
+
     fun getThreeProducts() = listOf(
         Product("Camiseta", 100.00, "", "Vestuário"),
         Product("Shorts", 20.00, "", "Vestuário"),

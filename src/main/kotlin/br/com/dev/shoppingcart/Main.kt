@@ -23,8 +23,12 @@ object Main : KoinComponent {
         val app = Javalin.create().start(8000)
 
         app.routes {
-            path("cart/:user-id/products") {
-                get(cartController::getAllProductsFromCart)
+            path("cart/:user-id") {
+                get(cartController::getCart)
+
+                path("products") {
+                    get(cartController::getAllProductsFromCart)
+                }
             }
         }
     }

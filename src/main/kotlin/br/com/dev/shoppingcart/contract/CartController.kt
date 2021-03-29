@@ -1,4 +1,4 @@
-package br.com.dev.shoppingcart.controller
+package br.com.dev.shoppingcart.contract
 
 import br.com.dev.shoppingcart.service.CartService
 import io.javalin.http.Context

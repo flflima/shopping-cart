@@ -23,11 +23,14 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
     implementation 'org.koin:koin-core:2.2.2'
 
+    testImplementation 'io.rest-assured:rest-assured:4.3.3'
+    testImplementation 'io.rest-assured:kotlin-extensions:4.3.3'
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
     testImplementation 'io.mockk:mockk:1.10.6'
     testCompile 'org.assertj:assertj-core:3.11.1'
+    testCompile 'com.github.tomakehurst:wiremock-jre8:2.27.2'
 }
 
 test {

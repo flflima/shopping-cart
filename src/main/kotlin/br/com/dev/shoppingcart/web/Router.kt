@@ -16,10 +16,10 @@ class Router(private val cartController: CartController) {
 
                     path(":user-id") {
                         get(cartController::getCart)
-                    }
 
-                    path("products") {
-                        get(cartController::getAllProductsFromCart)
+                        path("products") {
+                            get(cartController::getAllProductsFromCart)
+                        }
                     }
                 }
             }

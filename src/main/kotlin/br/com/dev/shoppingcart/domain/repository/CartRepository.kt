@@ -7,13 +7,13 @@ class CartRepository {
 
     private val allCarts = mutableSetOf(
         Cart(
-            "1", listOf(Product("Shorts", 55.00, "", "Vestuário"))
+            "1", listOf(Product(1, "Shorts", 55.00, "", "Vestuário"))
         ),
         Cart(
             "2",
             listOf(
-                Product("Xadrez", 35.0, "Jogo de Xadrez", "Jogos de Tabuleiro"),
-                Product("Camiseta", 80.0, "Camiseta Branca", "Vestuário")
+                Product(1, "Xadrez", 35.0, "Jogo de Xadrez", "Jogos de Tabuleiro"),
+                Product(2, "Camiseta", 80.0, "Camiseta Branca", "Vestuário")
             )
         ),
         Cart("3", emptyList())

@@ -32,7 +32,7 @@ internal class CartServiceTest {
     fun `given an existing cart must return all products related to it`() {
         // arrange
         every { cartRepository.getCartByUserId(any()) } returns CartMock.getOneEmptyCart()
-        every { cartRepository.getCartProductsByUserId(any()) } returns ProductMock.getThreeProducts()
+        every { cartRepository.getCartProductsByUserId(any()) } returns ProductMock.getListWithThreeProducts()
 
         // act
         val allProducts = this.sut.getAllProductsFromCart("1")

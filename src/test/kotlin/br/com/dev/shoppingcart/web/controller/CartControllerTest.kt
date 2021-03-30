@@ -55,7 +55,7 @@ internal class CartControllerTest : BaseTest() {
 
     @Test
     fun `given a request for all products in a cart must return a list of products`() {
-        every { cartService.getAllProductsFromCart(any()) } returns ProductMock.getOneProduct()
+        every { cartService.getAllProductsFromCart(any()) } returns ProductMock.getListWithOneProduct()
 
         given()
             .`when`()

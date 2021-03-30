@@ -2,6 +2,7 @@ package br.com.dev.shoppingcart.web.controller
 
 import br.com.dev.shoppingcart.config.GlobalObjectMapper
 import br.com.dev.shoppingcart.domain.service.CartService
+import br.com.dev.shoppingcart.domain.service.ProductService
 import br.com.dev.shoppingcart.web.Router
 import io.javalin.Javalin
 import io.javalin.plugin.json.JavalinJackson
@@ -14,10 +15,15 @@ abstract class BaseTest {
 
     private lateinit var app: Javalin
 
-    private lateinit var sut: CartController
+    private lateinit var cartController: CartController
+
+    private lateinit var productController: ProductController
 
     @MockK
     lateinit var cartService: CartService
+
+    @MockK
+    lateinit var productService: ProductService
 
     private companion object {
         const val PORT = 8000
@@ -28,9 +34,10 @@ abstract class BaseTest {
         app = Javalin.create()
         JavalinJackson.configure(GlobalObjectMapper.getObjectMapper())
 
-        sut = CartController(cartService)
+        cartController = CartController(cartService)
+        productController = ProductController(productService)
 
-        val router = Router(sut)
+        val router = Router(cartController, productController)
         router.configure(app)
 
         RestAssured.port = PORT

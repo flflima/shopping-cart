@@ -6,5 +6,5 @@ object CartMock {
 
     fun getOneEmptyCart() = Cart("1", emptyList())
 
-    fun getOneCartWithThreeProducts() = Cart("1", ProductMock.getThreeProducts())
+    fun getOneCartWithThreeProducts() = Cart("1", ProductMock.getListWithThreeProducts())
 }

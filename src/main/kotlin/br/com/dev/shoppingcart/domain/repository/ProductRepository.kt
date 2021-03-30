@@ -1,6 +1,8 @@
 package br.com.dev.shoppingcart.domain.repository
 
 import br.com.dev.shoppingcart.domain.model.Product
+import br.com.dev.shoppingcart.web.dto.ProductDTO
+import kotlin.random.Random
 
 class ProductRepository {
 
@@ -12,5 +14,17 @@ class ProductRepository {
 
     fun findProductById(productId: Long) = allProducts.firstOrNull {
         it.id == productId
+    }
+
+    fun saveProduct(productDTO: ProductDTO): Product {
+        val product = Product(
+            (allProducts.size + 1).toLong(),
+            productDTO.name,
+            productDTO.price,
+            productDTO.description,
+            productDTO.category
+        )
+        this.allProducts.add(product)
+        return product
     }
 }

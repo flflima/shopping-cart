@@ -2,6 +2,7 @@ package br.com.dev.shoppingcart.domain.service
 
 import br.com.dev.shoppingcart.domain.repository.ProductRepository
 import br.com.dev.shoppingcart.mocks.ProductMock
+import br.com.dev.shoppingcart.web.dto.ProductDTO
 import io.javalin.http.NotFoundResponse
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -53,5 +54,24 @@ internal class ProductServiceTest {
         // assert
         assertThat(exception).isNotNull
         assertThat(exception).hasMessage("Product with id 1 not found!")
+    }
+
+    @Test
+    fun `given a request must create a product`() {
+        // arrange
+        every { productRepository.saveProduct(any()) } returns ProductMock.getOneProduct()
+
+        val productDTO = ProductDTO("Camiseta", 100.00, "", "Vestuário")
+
+        // act
+        val product = this.sut.createProduct(productDTO)
+
+        // assert
+        assertThat(product).isNotNull
+        assertThat(product.id).isEqualTo(1)
+        assertThat(product.name).isEqualTo(productDTO.name)
+        assertThat(product.price).isEqualTo(productDTO.price)
+        assertThat(product.description).isEqualTo(productDTO.description)
+        assertThat(product.category).isEqualTo(productDTO.category)
     }
 }

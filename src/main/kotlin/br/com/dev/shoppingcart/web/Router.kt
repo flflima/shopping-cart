@@ -25,6 +25,8 @@ class Router(private val cartController: CartController, private val productCont
                 }
 
                 path("product") {
+                    post(productController::createProduct)
+
                     path(":product-id") {
                         get(productController::getProduct)
                     }

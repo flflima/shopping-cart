@@ -40,4 +40,29 @@ class ProductControllerTest : BaseTest() {
             .statusCode(404)
             .body(equalTo("Not found"))
     }
+
+    @Test
+    fun `given a request to create a product must return a new product`() {
+        every { productService.createProduct(any()) } returns ProductMock.getOneProduct()
+
+        val body = """
+                {
+                    "name": "Camiseta",
+                    "price": 100.0,
+                    "category": "Vestuário"
+                }
+            """.trimIndent()
+
+        RestAssured.given()
+            .body(body)
+            .header("Content-Type", "application/json")
+            .`when`()
+            .post("product")
+            .then()
+            .assertThat()
+            .body("name", equalTo("Camiseta"))
+            .body("price", equalTo(100.0f))
+            .body("category", equalTo("Vestuário"))
+            .statusCode(201)
+    }
 }

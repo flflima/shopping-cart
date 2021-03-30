@@ -2,40 +2,15 @@ package br.com.dev.shoppingcart.web.controller
 
 import br.com.dev.shoppingcart.mocks.CartMock
 import br.com.dev.shoppingcart.mocks.ProductMock
-import br.com.dev.shoppingcart.domain.service.CartService
-import br.com.dev.shoppingcart.web.Router
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.restassured.RestAssured.given
 import org.hamcrest.CoreMatchers.equalTo
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
 internal class CartControllerTest : BaseTest() {
-
-    private lateinit var sut: CartController
-
-    @MockK
-    private lateinit var cartService: CartService
-
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        sut = CartController(cartService)
-
-        val router = Router(sut)
-        router.configure(server)
-    }
-
-    @AfterEach
-    override fun `tear down`() {
-        super.`tear down`()
-    }
 
     @Test
     fun `given a request for a cart with an existing user id must return all data into a cart`() {

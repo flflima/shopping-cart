@@ -5,7 +5,7 @@ import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder
 import org.koin.core.component.KoinComponent
 
-class Router(private val cartController: CartController) : KoinComponent {
+class Router(private val cartController: CartController) {
 
     fun configure(server: Javalin) {
         server.apply {

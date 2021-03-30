@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.31'
     id 'application'
+    id 'jacoco'
 }
 
 mainClassName = 'br.com.dev.shoppingcart.MainKt'
@@ -56,4 +57,58 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+jacoco {
+    toolVersion = "0.8.6"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+
+    afterEvaluate {
+        excludeFiles(classDirectories)
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                enabled = true
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.5
+            }
+        }
+    }
+
+    afterEvaluate {
+        excludeFiles(classDirectories)
+    }
+}
+
+private excludeFiles(classDirectories) {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: ['br/com/dev/shoppingcart/config/**',
+                                    'br/com/dev/shoppingcart/App**',
+                                    'br/com/dev/shoppingcart/domain/repository/**'])
+    }))
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    dependsOn jacocoTestReport
 }

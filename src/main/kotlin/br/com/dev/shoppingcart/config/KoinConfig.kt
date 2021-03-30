@@ -6,6 +6,7 @@ import br.com.dev.shoppingcart.domain.service.CartService
 import br.com.dev.shoppingcart.web.Router
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.koin.dsl.module
 
 object KoinConfig {
@@ -34,7 +35,7 @@ object KoinConfig {
 }
 
 object GlobalObjectMapper {
-    fun getObjectMapper() = ObjectMapper().apply {
+    fun getObjectMapper() = jacksonObjectMapper().apply {
         this.propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
     }
 }

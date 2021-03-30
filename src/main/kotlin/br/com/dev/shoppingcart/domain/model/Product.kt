@@ -1,4 +1,4 @@
-package br.com.dev.shoppingcart.model
+package br.com.dev.shoppingcart.domain.model
 
 data class Product(
     val name: String,

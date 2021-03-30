@@ -1,7 +1,7 @@
-package br.com.dev.shoppingcart.dao
+package br.com.dev.shoppingcart.domain.repository
 
-import br.com.dev.shoppingcart.model.Cart
-import br.com.dev.shoppingcart.model.Product
+import br.com.dev.shoppingcart.domain.model.Cart
+import br.com.dev.shoppingcart.domain.model.Product
 
 class CartRepository {
 

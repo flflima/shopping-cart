@@ -1,6 +1,6 @@
 package br.com.dev.shoppingcart.mocks
 
-import br.com.dev.shoppingcart.model.Product
+import br.com.dev.shoppingcart.domain.model.Product
 
 object ProductMock {
 

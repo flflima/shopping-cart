@@ -1,6 +1,6 @@
-package br.com.dev.shoppingcart.service
+package br.com.dev.shoppingcart.domain.service
 
-import br.com.dev.shoppingcart.dao.CartRepository
+import br.com.dev.shoppingcart.domain.repository.CartRepository
 import br.com.dev.shoppingcart.mocks.CartMock
 import br.com.dev.shoppingcart.mocks.ProductMock
 import io.mockk.every

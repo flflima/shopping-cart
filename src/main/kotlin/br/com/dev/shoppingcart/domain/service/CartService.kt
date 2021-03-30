@@ -1,8 +1,8 @@
-package br.com.dev.shoppingcart.service
+package br.com.dev.shoppingcart.domain.service
 
-import br.com.dev.shoppingcart.dao.CartRepository
-import br.com.dev.shoppingcart.model.Cart
-import br.com.dev.shoppingcart.model.Product
+import br.com.dev.shoppingcart.domain.repository.CartRepository
+import br.com.dev.shoppingcart.domain.model.Cart
+import br.com.dev.shoppingcart.domain.model.Product
 
 class CartService(private val cartRepository: CartRepository) {
 

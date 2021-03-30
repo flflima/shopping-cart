@@ -4,6 +4,7 @@ import br.com.dev.shoppingcart.domain.model.toCartDTO
 import br.com.dev.shoppingcart.domain.model.toProductDTO
 import br.com.dev.shoppingcart.domain.service.CartService
 import br.com.dev.shoppingcart.web.dto.CartDTO
+import io.javalin.http.ConflictResponse
 import io.javalin.http.Context
 
 class CartController(private val cartService: CartService) {

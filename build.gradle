@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = 'br.com.dev.shoppingcart.AppKt'
 group = 'br.com.dev'
-version = '1.2.0'
+version = '1.2.1'
 
 repositories {
     mavenCentral()

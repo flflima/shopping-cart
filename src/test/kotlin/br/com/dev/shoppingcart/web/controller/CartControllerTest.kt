@@ -3,6 +3,7 @@ package br.com.dev.shoppingcart.web.controller
 import br.com.dev.shoppingcart.mocks.CartMock
 import br.com.dev.shoppingcart.mocks.ProductMock
 import br.com.dev.shoppingcart.web.dto.CartDTO
+import io.javalin.http.ConflictResponse
 import io.javalin.http.NotFoundResponse
 import io.mockk.every
 import io.mockk.junit5.MockKExtension
@@ -15,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 internal class CartControllerTest : BaseTest() {
 
     @Test
-    fun `given a request for a cart with an existing user id must return all data into a cart`() {
+    fun `given a request for an existing cart must return all products`() {
         every { cartService.getCart(any()) } returns CartMock.getOneCartWithThreeProducts()
 
         given()
@@ -40,7 +41,7 @@ internal class CartControllerTest : BaseTest() {
     }
 
     @Test
-    fun `given a request for a cart with a non existing user id must return a not found status code`() {
+    fun `given a request for a non existing cart must return a not found status code`() {
         every { cartService.getCart(any()) } throws NotFoundResponse()
 
         given()
@@ -49,10 +50,11 @@ internal class CartControllerTest : BaseTest() {
             .then()
             .assertThat()
             .statusCode(404)
+            .body(equalTo("Not found"))
     }
 
     @Test
-    fun `given a request for all products in a cart with an existing user id must return a list of products`() {
+    fun `given a request for all products in a cart must return a list of products`() {
         every { cartService.getAllProductsFromCart(any()) } returns ProductMock.getOneProduct()
 
         given()
@@ -69,7 +71,7 @@ internal class CartControllerTest : BaseTest() {
     }
 
     @Test
-    fun `given a request for all products in a cart with a non existing user id must return a not found status code`() {
+    fun `given a request for all products to a non existing cart must return a not found status code`() {
         every { cartService.getAllProductsFromCart(any()) } throws NotFoundResponse()
 
         given()
@@ -78,6 +80,7 @@ internal class CartControllerTest : BaseTest() {
             .then()
             .assertThat()
             .statusCode(404)
+            .body(equalTo("Not found"))
     }
 
     @Test
@@ -102,6 +105,29 @@ internal class CartControllerTest : BaseTest() {
             .body("user_id", equalTo("1"))
             .body("products.size()", equalTo(0))
             .statusCode(201)
+    }
+
+    @Test
+    fun `given a request to create a cart that already exists must return a conflict status code`() {
+        every { cartService.createCartByUserId(any()) } throws ConflictResponse()
+
+        val body = """
+                {
+                    "user_id": "1"
+                }
+            """.trimIndent()
+
+        given()
+            .body(
+                body
+            )
+            .header("Content-Type", "application/json")
+            .`when`()
+            .post("cart")
+            .then()
+            .assertThat()
+            .statusCode(409)
+            .body(equalTo("Conflict"))
     }
 
 }

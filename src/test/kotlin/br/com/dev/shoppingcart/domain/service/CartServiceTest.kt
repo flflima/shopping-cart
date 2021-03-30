@@ -4,6 +4,7 @@ import br.com.dev.shoppingcart.domain.repository.CartRepository
 import br.com.dev.shoppingcart.mocks.CartMock
 import br.com.dev.shoppingcart.mocks.ProductMock
 import br.com.dev.shoppingcart.web.dto.CartDTO
+import io.javalin.http.ConflictResponse
 import io.javalin.http.NotFoundResponse
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -28,7 +29,7 @@ internal class CartServiceTest {
     }
 
     @Test
-    fun `given an existing user id must return all products related to it`() {
+    fun `given an existing cart must return all products related to it`() {
         // arrange
         every { cartRepository.getCartByUserId(any()) } returns CartMock.getOneEmptyCart()
         every { cartRepository.getCartProductsByUserId(any()) } returns ProductMock.getThreeProducts()
@@ -41,7 +42,7 @@ internal class CartServiceTest {
     }
 
     @Test
-    fun `given a non existing user when requesting all products from a cart must throw a NotFoundResponse exception`() {
+    fun `given a non existing cart when requesting all products must throw a NotFoundResponse exception`() {
         // arrange
         every { cartRepository.getCartByUserId(any()) } returns null
 
@@ -56,7 +57,7 @@ internal class CartServiceTest {
     }
 
     @Test
-    fun `given an existing user id must return a cart`() {
+    fun `given an user id must return a cart`() {
         // arrange
         every { cartRepository.getCartByUserId(any()) } returns CartMock.getOneEmptyCart()
 
@@ -68,7 +69,7 @@ internal class CartServiceTest {
     }
 
     @Test
-    fun `given a non existing user when requesting a cart must throw a NotFoundResponse exception`() {
+    fun `given a non existing cart when requesting a cart must throw a NotFoundResponse exception`() {
         // arrange
         every { cartRepository.getCartByUserId(any()) } returns null
 
@@ -79,12 +80,13 @@ internal class CartServiceTest {
 
         // assert
         assertThat(exception).isNotNull
-        assertThat(exception).hasMessage("User not found!")
+        assertThat(exception).hasMessage("Cart not found!")
     }
 
     @Test
     fun `given a valid cart dto must create a cart`() {
         // arrange
+        every { cartRepository.getCartByUserId(any()) } returns null
         every { cartRepository.createCart(any()) } returns CartMock.getOneEmptyCart()
         val userId = "1"
 
@@ -95,5 +97,20 @@ internal class CartServiceTest {
         assertThat(cartDTO).isNotNull
         assertThat(cartDTO.userId).isEqualTo("1")
         assertThat(cartDTO.products).isEmpty()
+    }
+
+    @Test
+    fun `given an existing cart when trying to create a new cart with the same user id must throw a ConflictResponse exception`() {
+        // arrange
+        every { cartRepository.getCartByUserId(any()) } returns CartMock.getOneEmptyCart()
+
+        // act
+        val exception = assertThrows<ConflictResponse> {
+            this.sut.createCartByUserId("1")
+        }
+
+        // assert
+        assertThat(exception).isNotNull
+        assertThat(exception).hasMessage("Cart already exists!")
     }
 }

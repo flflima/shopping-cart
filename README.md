@@ -29,21 +29,43 @@ java -jar build/libs/shopping-cart-<version>.jar
 Create a cart associated to a user
 
 ```curl
-curl --request POST 'localhost:8000/cart' \
+curl --request POST 'localhost:8000/carts' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "user_id": "123"
 }'
+
+{"user_id":"123","products":[]}
 ```
 
 Get a cart associated to a user
 
 ```curl
 curl 'localhost:8000/cart/123' 
+
+{"user_id":"123","products":[]}
 ```
 
-Get all products added to a chart for the same user
+
+Create a product
 
 ```curl
-curl 'localhost:8000/cart/123/products' 
+curl --request POST 'localhost:8000/products' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Sneakers",
+    "price": 99.99,
+    "description": "",
+    "category": "Clothing"
+}'
+
+{"id":4,"name":"Sneakers","price":99.99,"description":"","category":"Clothing"}
+```
+
+Get a product by id
+
+```curl
+curl 'localhost:8000/product/4' 
+
+{"name":"Sneakers","price":99.99,"description":"","category":"Clothing"}
 ```

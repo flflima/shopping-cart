@@ -1,6 +1,5 @@
 package br.com.dev.shoppingcart.domain.service
 
-import br.com.dev.shoppingcart.domain.model.Product
 import br.com.dev.shoppingcart.domain.repository.ProductRepository
 import br.com.dev.shoppingcart.web.dto.ProductDTO
 import io.javalin.http.NotFoundResponse

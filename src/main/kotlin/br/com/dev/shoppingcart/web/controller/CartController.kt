@@ -1,30 +1,27 @@
 package br.com.dev.shoppingcart.web.controller
 
-import br.com.dev.shoppingcart.domain.model.toCartDTO
 import br.com.dev.shoppingcart.domain.model.toProductDTO
 import br.com.dev.shoppingcart.domain.service.CartService
+import br.com.dev.shoppingcart.domain.service.ProductService
 import br.com.dev.shoppingcart.web.dto.CartDTO
-import io.javalin.http.ConflictResponse
 import io.javalin.http.Context
 
-class CartController(private val cartService: CartService) {
-
-    fun getAllProductsFromCart(ctx: Context) {
-        this.cartService.getAllProductsFromCart(ctx.pathParam("user-id")).apply {
-            ctx.json(this.map { it.toProductDTO() })
-        }
-    }
+class CartController(private val cartService: CartService, private val productService: ProductService) {
 
     fun getCart(ctx: Context) {
         this.cartService.getCart(ctx.pathParam("user-id")).apply {
-            ctx.json(this.toCartDTO())
+            val cartDTO = CartDTO(this.first().userId, this.toList()
+                .filter { cart -> cart.productId != null }
+                .map { cartProduct -> productService.getProductById(cartProduct.productId!!).toProductDTO() })
+            ctx.json(cartDTO)
         }
     }
 
     fun createCart(ctx: Context) {
-        val cartDTO = ctx.body<CartDTO>()
-        this.cartService.createCartByUserId(cartDTO.userId).apply {
-            ctx.json(this)
+        val cartDTOBody = ctx.body<CartDTO>()
+        this.cartService.createCartByUserId(cartDTOBody.userId).apply {
+            val cartDTO = CartDTO(this.first().userId)
+            ctx.json(cartDTO)
             ctx.status(201)
         }
     }

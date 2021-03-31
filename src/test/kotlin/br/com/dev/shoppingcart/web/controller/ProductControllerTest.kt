@@ -14,7 +14,7 @@ class ProductControllerTest : BaseTest() {
 
     @Test
     fun `given a request for an existing product must return it`() {
-        every { productService.getProductById(any()) } returns ProductMock.getOneProduct()
+        every { productService.getProductById(any()) } returns ProductMock.getOneProductWithCamiseta()
 
         RestAssured.given()
             .`when`()
@@ -43,7 +43,7 @@ class ProductControllerTest : BaseTest() {
 
     @Test
     fun `given a request to create a product must return a new product`() {
-        every { productService.createProduct(any()) } returns ProductMock.getOneProduct()
+        every { productService.createProduct(any()) } returns ProductMock.getOneProductWithCamiseta()
 
         val body = """
                 {
@@ -57,7 +57,7 @@ class ProductControllerTest : BaseTest() {
             .body(body)
             .header("Content-Type", "application/json")
             .`when`()
-            .post("product")
+            .post("products")
             .then()
             .assertThat()
             .body("name", equalTo("Camiseta"))

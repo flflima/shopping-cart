@@ -29,7 +29,7 @@ internal class ProductServiceTest {
     @Test
     fun `given a request must return a product by id`() {
         // arrange
-        every { productRepository.findProductById(any()) } returns ProductMock.getOneProduct()
+        every { productRepository.findProductById(any()) } returns ProductMock.getOneProductWithCamiseta()
 
         // act
         val product = this.sut.getProductById(1)
@@ -59,7 +59,7 @@ internal class ProductServiceTest {
     @Test
     fun `given a request must create a product`() {
         // arrange
-        every { productRepository.saveProduct(any()) } returns ProductMock.getOneProduct()
+        every { productRepository.saveProduct(any()) } returns ProductMock.getOneProductWithCamiseta()
 
         val productDTO = ProductDTO("Camiseta", 100.00, "", "Vestuário")
 

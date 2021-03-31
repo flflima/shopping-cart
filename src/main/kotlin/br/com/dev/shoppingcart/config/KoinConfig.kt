@@ -14,7 +14,7 @@ import org.koin.dsl.module
 
 object KoinConfig {
     private val controllersModules = module {
-        single { CartController(get()) }
+        single { CartController(get() as CartService, get() as ProductService) }
         single { ProductController(get()) }
     }
 

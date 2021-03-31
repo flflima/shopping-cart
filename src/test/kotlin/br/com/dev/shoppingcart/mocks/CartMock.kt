@@ -1,10 +1,14 @@
 package br.com.dev.shoppingcart.mocks
 
-import br.com.dev.shoppingcart.domain.model.Cart
+import br.com.dev.shoppingcart.domain.model.CartProduct
 
 object CartMock {
 
-    fun getOneEmptyCart() = Cart("1", emptyList())
+    fun getOneEmptyCart() = setOf(CartProduct(userId = "1", cartId = 1))
 
-    fun getOneCartWithThreeProducts() = Cart("1", ProductMock.getListWithThreeProducts())
+    fun getOneCartWithThreeProducts() = setOf(
+        CartProduct(userId = "1", cartId = 1, productId = 1),
+        CartProduct(userId = "1", cartId = 1, productId = 2),
+        CartProduct(userId = "1", cartId = 1, productId = 3)
+    )
 }

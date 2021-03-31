@@ -34,7 +34,7 @@ abstract class BaseTest {
         app = Javalin.create()
         JavalinJackson.configure(GlobalObjectMapper.getObjectMapper())
 
-        cartController = CartController(cartService)
+        cartController = CartController(cartService, productService)
         productController = ProductController(productService)
 
         val router = Router(cartController, productController)

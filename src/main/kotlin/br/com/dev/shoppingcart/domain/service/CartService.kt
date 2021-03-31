@@ -1,6 +1,5 @@
 package br.com.dev.shoppingcart.domain.service
 
-import br.com.dev.shoppingcart.domain.model.CartProduct
 import br.com.dev.shoppingcart.domain.model.toProductDTO
 import br.com.dev.shoppingcart.domain.repository.CartRepository
 import br.com.dev.shoppingcart.domain.repository.ProductRepository
@@ -10,16 +9,23 @@ import io.javalin.http.NotFoundResponse
 
 class CartService(private val cartRepository: CartRepository, private val productRepository: ProductRepository) {
 
-    fun getCart(userId: String): Set<CartProduct> = this.cartRepository.getCartByUserId(userId).let {
-        return if (it.isEmpty()) throw NotFoundResponse("Cart not found!") else it
+    fun getCart(userId: String): CartDTO = this.cartRepository.getCartByUserId(userId).let {
+        return if (it.isEmpty()) {
+            throw NotFoundResponse("Cart not found!")
+        } else {
+            CartDTO(
+                it.first().userId,
+                cartRepository.getProductsByCartId(it.first().id).map { product -> product.toProductDTO() })
+        }
     }
 
-    fun createCartByUserId(userId: String): Set<CartProduct> {
+    fun createCartByUserId(userId: String): CartDTO {
         cartRepository.getCartByUserId(userId).let {
             if (it.isNotEmpty()) {
                 throw ConflictResponse("Cart already exists!")
             }
-            return cartRepository.createCart(userId)
+
+            return CartDTO(cartRepository.createCart(userId).first().userId)
         }
     }
 

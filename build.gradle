@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = 'br.com.dev.shoppingcart.AppKt'
 group = 'br.com.dev'
-version = '2.1.0'
+version = '2.1.1'
 
 repositories {
     mavenCentral()
@@ -96,9 +96,9 @@ private excludeFiles(classDirectories) {
     classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it, exclude: ['br/com/dev/shoppingcart/config/**',
                                     'br/com/dev/shoppingcart/App**',
-                                    'br/com/dev/shoppingcart/domain/repository/**',
                                     'br/com/dev/shoppingcart/domain/model/**',
-                                    'br/com/dev/shoppingcart/web/dto/**'])
+                                    'br/com/dev/shoppingcart/web/dto/**',
+                                    'br/com/dev/shoppingcart/domain/database/**'])
     }))
 }
 

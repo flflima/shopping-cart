@@ -1,18 +1,15 @@
 package br.com.dev.shoppingcart.mocks
 
-import br.com.dev.shoppingcart.domain.model.CartProduct
+import br.com.dev.shoppingcart.domain.model.Cart
+import br.com.dev.shoppingcart.domain.model.toProductDTO
+import br.com.dev.shoppingcart.web.dto.CartDTO
 
 object CartMock {
 
-    fun getOneEmptyCart() = setOf(CartProduct(userId = "1", cartId = 1))
+    fun getOneCart() = CartDTO("1")
 
-    fun getOneCartWithTwoProducts() = setOf(
-        CartProduct(userId = "1", cartId = 1, productId = 1),
-        CartProduct(userId = "1", cartId = 1, productId = 2)
-    )
-    fun getOneCartWithThreeProducts() = setOf(
-        CartProduct(userId = "1", cartId = 1, productId = 1),
-        CartProduct(userId = "1", cartId = 1, productId = 2),
-        CartProduct(userId = "1", cartId = 1, productId = 3)
-    )
+    fun getOneEmptyCart() = listOf(Cart(1, "1"))
+
+    fun getOneCartWithThreeProducts() = CartDTO("1", ProductMock.getListWithThreeProducts().map { it.toProductDTO() })
+
 }

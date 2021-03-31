@@ -61,7 +61,8 @@ internal class ProductServiceTest {
         // arrange
         every { productRepository.saveProduct(any()) } returns ProductMock.getOneProductWithCamiseta()
 
-        val productDTO = ProductDTO("Camiseta", 100.00, "", "Vestuário", 10)
+        val productDTO =
+            ProductDTO(name = "Camiseta", price = 100.00, description = "", category = "Vestuário", quantity = 10)
 
         // act
         val product = this.sut.createProduct(productDTO)

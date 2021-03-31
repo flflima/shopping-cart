@@ -11,18 +11,14 @@ class CartController(private val cartService: CartService, private val productSe
 
     fun getCart(ctx: Context) {
         this.cartService.getCart(ctx.pathParam("user-id")).apply {
-            val cartDTO = CartDTO(this.first().userId, this.toList()
-                .filter { cart -> cart.productId != null }
-                .map { cartProduct -> productService.getProductById(cartProduct.productId!!).toProductDTO() })
-            ctx.json(cartDTO)
+            ctx.json(this)
         }
     }
 
     fun createCart(ctx: Context) {
         val cartDTOBody = ctx.body<CartDTO>()
         this.cartService.createCartByUserId(cartDTOBody.userId).apply {
-            val cartDTO = CartDTO(this.first().userId)
-            ctx.json(cartDTO)
+            ctx.json(this)
             ctx.status(201)
         }
     }

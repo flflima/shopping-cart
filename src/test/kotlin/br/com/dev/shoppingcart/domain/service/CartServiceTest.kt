@@ -1,10 +1,10 @@
 package br.com.dev.shoppingcart.domain.service
 
-import br.com.dev.shoppingcart.domain.model.CartProduct
 import br.com.dev.shoppingcart.domain.repository.CartRepository
 import br.com.dev.shoppingcart.domain.repository.ProductRepository
 import br.com.dev.shoppingcart.mocks.CartMock
 import br.com.dev.shoppingcart.mocks.ProductMock
+import br.com.dev.shoppingcart.web.dto.CartDTO
 import io.javalin.http.ConflictResponse
 import io.javalin.http.NotFoundResponse
 import io.mockk.every
@@ -36,6 +36,7 @@ internal class CartServiceTest {
     fun `given an user id must return a cart`() {
         // arrange
         every { cartRepository.getCartByUserId(any()) } returns CartMock.getOneEmptyCart()
+        every { cartRepository.getProductsByCartId(any()) } returns ProductMock.getListWithOneProduct()
 
         // act
         val cart = this.sut.getCart("1")
@@ -47,7 +48,7 @@ internal class CartServiceTest {
     @Test
     fun `given a non existing cart when requesting a cart must throw a NotFoundResponse exception`() {
         // arrange
-        every { cartRepository.getCartByUserId(any()) } returns emptySet()
+        every { cartRepository.getCartByUserId(any()) } returns emptyList()
 
         // act
         val exception = assertThrows<NotFoundResponse> {
@@ -62,16 +63,17 @@ internal class CartServiceTest {
     @Test
     fun `given a valid cart dto must create a cart`() {
         // arrange
-        every { cartRepository.getCartByUserId(any()) } returns emptySet()
+        every { cartRepository.getCartByUserId(any()) } returns emptyList()
         every { cartRepository.createCart(any()) } returns CartMock.getOneEmptyCart()
+
         val userId = "1"
 
         // act
-        val cartProduct: Set<CartProduct> = this.sut.createCartByUserId(userId)
+        val cartDTO: CartDTO = this.sut.createCartByUserId(userId)
 
         // assert
-        assertThat(cartProduct).isNotEmpty
-        assertThat(cartProduct.size).isEqualTo(1)
+        assertThat(cartDTO).isNotNull
+        assertThat(cartDTO.products).isEmpty()
     }
 
     @Test
@@ -90,10 +92,10 @@ internal class CartServiceTest {
     }
 
     @Test
-    fun `given a valid product id must return a cart  with a new product`() {
+    fun `given a valid product id must return a cart with a new product`() {
         // arrange
         every { productRepository.findProductById(any()) } returns ProductMock.getOneProductWithTenis()
-        every { cartRepository.addProduct(any(), any(), any()) } returns CartMock.getOneCartWithThreeProducts().toList()
+        every { cartRepository.addProduct(any(), any(), any()) } returns CartMock.getOneEmptyCart()
 
         // act
         val cart = this.sut.addProduct("1", ProductMock.getOneProductWithTenis().id, 10)
@@ -101,7 +103,7 @@ internal class CartServiceTest {
         // assert
         assertThat(cart).isNotNull
         assertThat(cart.userId).isEqualTo("1")
-        assertThat(cart.products).size().isEqualTo(3)
+        assertThat(cart.products).size().isEqualTo(1)
     }
 
     @Test

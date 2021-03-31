@@ -17,7 +17,7 @@ class Router(private val cartController: CartController, private val productCont
                 }
 
                 path("cart") {
-                    path(":user-id") {
+                    path("user/:user-id") {
                         get(cartController::getCart)
 
                         path("products") {

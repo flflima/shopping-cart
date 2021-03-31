@@ -1,6 +1,5 @@
 package br.com.dev.shoppingcart.web.controller
 
-import br.com.dev.shoppingcart.domain.model.CartProduct
 import br.com.dev.shoppingcart.domain.model.toProductDTO
 import br.com.dev.shoppingcart.mocks.CartMock
 import br.com.dev.shoppingcart.mocks.ProductMock
@@ -24,7 +23,7 @@ internal class CartControllerTest : BaseTest() {
 
         given()
             .`when`()
-            .get("cart/1")
+            .get("cart/user/1")
             .then()
             .assertThat()
             .statusCode(200)
@@ -58,7 +57,7 @@ internal class CartControllerTest : BaseTest() {
 
     @Test
     fun `given a request to create a cart for an user must return a new cart with empty products list`() {
-        every { cartService.createCartByUserId(any()) } returns setOf(CartProduct("1", 1))
+        every { cartService.createCartByUserId(any()) } returns CartMock.getOneCart()
 
         val body = """
                 {
@@ -122,7 +121,7 @@ internal class CartControllerTest : BaseTest() {
             )
             .header("Content-Type", "application/json")
             .`when`()
-            .post("cart/1/products")
+            .post("cart/user/1/products")
             .then()
             .assertThat()
             .body("user_id", equalTo("1"))
@@ -152,7 +151,7 @@ internal class CartControllerTest : BaseTest() {
             )
             .header("Content-Type", "application/json")
             .`when`()
-            .post("cart/1/products")
+            .post("cart/user/1/products")
             .then()
             .assertThat()
             .statusCode(404)

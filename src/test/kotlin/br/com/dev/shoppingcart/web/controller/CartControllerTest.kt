@@ -1,8 +1,10 @@
 package br.com.dev.shoppingcart.web.controller
 
 import br.com.dev.shoppingcart.domain.model.CartProduct
+import br.com.dev.shoppingcart.domain.model.toProductDTO
 import br.com.dev.shoppingcart.mocks.CartMock
 import br.com.dev.shoppingcart.mocks.ProductMock
+import br.com.dev.shoppingcart.web.dto.CartDTO
 import io.javalin.http.ConflictResponse
 import io.javalin.http.NotFoundResponse
 import io.mockk.every
@@ -99,6 +101,62 @@ internal class CartControllerTest : BaseTest() {
             .assertThat()
             .statusCode(409)
             .body(equalTo("Conflict"))
+    }
+
+    @Test
+    fun `given a request to add a product to a cart must return a cart with products list`() {
+        every { cartService.addProduct(any(), any(), any()) } returns CartDTO(
+            "1",
+            ProductMock.getListWithOneProduct().map { it.toProductDTO() })
+
+        val body = """
+                {
+                    "id": 1,
+                    "quantity": 10
+                }
+            """.trimIndent()
+
+        given()
+            .body(
+                body
+            )
+            .header("Content-Type", "application/json")
+            .`when`()
+            .post("cart/1/products")
+            .then()
+            .assertThat()
+            .body("user_id", equalTo("1"))
+            .body("products.size()", equalTo(1))
+            .body("products[0].name", equalTo("Camiseta"))
+            .body("products[0].price", equalTo(100.0f))
+            .body("products[0].description", equalTo(""))
+            .body("products[0].category", equalTo("Vestuário"))
+            .body("products[0].quantity", equalTo(0))
+            .statusCode(201)
+    }
+
+    @Test
+    fun `given a request to add a product tha does not exist to a cart must return a not found status code`() {
+        every { cartService.addProduct(any(), any(), any()) } throws NotFoundResponse("Not found!")
+
+        val body = """
+                {
+                    "id": 1,
+                    "quantity": 10
+                }
+            """.trimIndent()
+
+        given()
+            .body(
+                body
+            )
+            .header("Content-Type", "application/json")
+            .`when`()
+            .post("cart/1/products")
+            .then()
+            .assertThat()
+            .statusCode(404)
+            .body(equalTo("Not found!"))
     }
 
 }

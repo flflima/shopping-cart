@@ -2,7 +2,9 @@ package br.com.dev.shoppingcart.domain.service
 
 import br.com.dev.shoppingcart.domain.model.CartProduct
 import br.com.dev.shoppingcart.domain.repository.CartRepository
+import br.com.dev.shoppingcart.domain.repository.ProductRepository
 import br.com.dev.shoppingcart.mocks.CartMock
+import br.com.dev.shoppingcart.mocks.ProductMock
 import io.javalin.http.ConflictResponse
 import io.javalin.http.NotFoundResponse
 import io.mockk.every
@@ -22,9 +24,12 @@ internal class CartServiceTest {
     @MockK
     lateinit var cartRepository: CartRepository
 
+    @MockK
+    lateinit var productRepository: ProductRepository
+
     @BeforeEach
     fun setUp() {
-        this.sut = CartService(this.cartRepository)
+        this.sut = CartService(this.cartRepository, productRepository)
     }
 
     @Test
@@ -82,5 +87,33 @@ internal class CartServiceTest {
         // assert
         assertThat(exception).isNotNull
         assertThat(exception).hasMessage("Cart already exists!")
+    }
+
+    @Test
+    fun `given a valid product id must return a cart  with a new product`() {
+        // arrange
+        every { productRepository.findProductById(any()) } returns ProductMock.getOneProductWithTenis()
+        every { cartRepository.addProduct(any(), any(), any()) } returns CartMock.getOneCartWithThreeProducts().toList()
+
+        // act
+        val cart = this.sut.addProduct("1", ProductMock.getOneProductWithTenis().id, 10)
+
+        // assert
+        assertThat(cart).isNotNull
+        assertThat(cart.userId).isEqualTo("1")
+        assertThat(cart.products).size().isEqualTo(3)
+    }
+
+    @Test
+    fun `given a non existing product id must throw an exception`() {
+        // arrange
+        every { productRepository.findProductById(any()) } returns null
+
+        // act
+        val exception = assertThrows<NotFoundResponse> { this.sut.addProduct("1", 1, 10) }
+
+        // assert
+        assertThat(exception).isNotNull
+        assertThat(exception).hasMessage("Product not found!")
     }
 }

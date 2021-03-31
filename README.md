@@ -46,6 +46,18 @@ curl 'localhost:8000/cart/123'
 {"user_id":"123","products":[]}
 ```
 
+Add a product to a cart 
+
+```curl
+curl --request POST 'localhost:8000/cart/123/products' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": 4,
+    "quantity": 1
+}'
+
+{"id":"4","products":[{"name":"Sneakers","price":99.99,"description":"","category":"Clothing","quantity":1}]}
+```
 
 Create a product
 

@@ -19,7 +19,7 @@ object KoinConfig {
     }
 
     private val servicesModules = module {
-        single { CartService(get()) }
+        single { CartService(get(), get()) }
         single { ProductService(get()) }
     }
 

@@ -3,6 +3,7 @@ package br.com.dev.shoppingcart.web.controller
 import br.com.dev.shoppingcart.domain.model.toProductDTO
 import br.com.dev.shoppingcart.domain.service.CartService
 import br.com.dev.shoppingcart.domain.service.ProductService
+import br.com.dev.shoppingcart.web.dto.AddProductDTO
 import br.com.dev.shoppingcart.web.dto.CartDTO
 import io.javalin.http.Context
 
@@ -22,6 +23,14 @@ class CartController(private val cartService: CartService, private val productSe
         this.cartService.createCartByUserId(cartDTOBody.userId).apply {
             val cartDTO = CartDTO(this.first().userId)
             ctx.json(cartDTO)
+            ctx.status(201)
+        }
+    }
+
+    fun addProduct(ctx: Context) {
+        val productDTO = ctx.body<AddProductDTO>()
+        this.cartService.addProduct(ctx.pathParam("user-id"), productDTO.id, productDTO.quantity).apply {
+            ctx.json(this)
             ctx.status(201)
         }
     }

@@ -8,9 +8,9 @@ object ProductMock {
     fun getOneProductWithShorts() = Product(2, "Shorts", 20.00, "", "Vestuário")
     fun getOneProductWithTenis() = Product(3, "Tênis", 159.00, "", "Vestuário")
 
-    fun getListWithOneProduct() = listOf(Product(1, "Camiseta", 100.00, "", "Vestuário"))
+    fun getListWithOneProduct() = mutableListOf(Product(1, "Camiseta", 100.00, "", "Vestuário"))
 
-    fun getListWithThreeProducts() = listOf(
+    fun getListWithThreeProducts() = mutableListOf(
         getOneProductWithCamiseta(),
         getOneProductWithShorts(),
         getOneProductWithTenis()

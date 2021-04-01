@@ -18,6 +18,14 @@ A simple REST application with Kotlin
 ./gradlew clean build
 ```
 
+## Testing Application
+
+```console
+./gradlew clean test
+```
+
+Minimum coverage is 80%, and report in _build/jacocoHtml/index.html_
+
 ## Running Application
 
 ```console

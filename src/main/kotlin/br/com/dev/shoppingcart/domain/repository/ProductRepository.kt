@@ -5,7 +5,7 @@ import br.com.dev.shoppingcart.web.dto.ProductDTO
 
 class ProductRepository(private val products: MutableList<Product>) {
 
-    fun findProductById(productId: Long) = products.firstOrNull {
+    fun findProductById(productId: Long): Product? = products.firstOrNull {
         it.id == productId
     }
 

@@ -6,7 +6,6 @@ import br.com.dev.shoppingcart.domain.model.Product
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -16,18 +15,10 @@ internal class CartRepositoryTest {
     private lateinit var cut: CartRepository
 
     @MockK
-    private lateinit var carts: MutableList<Cart>
-
-    @MockK
     private lateinit var cartProducts: MutableList<CartProduct>
 
     @MockK
     private lateinit var products: MutableList<Product>
-
-    @BeforeEach
-    fun setUp() {
-        this.cut = CartRepository(carts, cartProducts, products)
-    }
 
     @Test
     fun `given an user id if it exists must return a list of carts`() {

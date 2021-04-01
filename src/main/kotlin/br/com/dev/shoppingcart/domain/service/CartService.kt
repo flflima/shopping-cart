@@ -33,7 +33,7 @@ class CartService(private val cartRepository: CartRepository, private val produc
         productRepository.findProductById(productId).let {
             if (it != null) {
                 return cartRepository.addProduct(userId, productId, quantity).let { cartProducts ->
-                    CartDTO(cartProducts.first().userId, cartProducts.map { _ -> it.toProductDTO(quantity) })
+                    CartDTO(userId, cartProducts.map { _ -> it.toProductDTO(cartProducts.first().quantity) })
                 }
             }
             throw NotFoundResponse("Product not found!")

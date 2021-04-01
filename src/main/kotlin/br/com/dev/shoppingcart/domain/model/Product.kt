@@ -12,6 +12,7 @@ data class Product(
 
 fun Product.toProductDTO(quantity: Int = 0) =
     ProductDTO(
+        id = this.id,
         name = this.name,
         price = this.price,
         description = this.description,

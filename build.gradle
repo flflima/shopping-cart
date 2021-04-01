@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = 'br.com.dev.shoppingcart.AppKt'
 group = 'br.com.dev'
-version = '2.1.1'
+version = '2.1.2'
 
 repositories {
     mavenCentral()
@@ -82,7 +82,7 @@ jacocoTestCoverageVerification {
                 enabled = true
                 counter = 'BRANCH'
                 value = 'COVEREDRATIO'
-                minimum = 0.5
+                minimum = 0.8
             }
         }
     }

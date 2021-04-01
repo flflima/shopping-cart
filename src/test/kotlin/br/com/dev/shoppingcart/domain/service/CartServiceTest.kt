@@ -95,7 +95,7 @@ internal class CartServiceTest {
     fun `given a valid product id must return a cart with a new product`() {
         // arrange
         every { productRepository.findProductById(any()) } returns ProductMock.getOneProductWithTenis()
-        every { cartRepository.addProduct(any(), any(), any()) } returns CartMock.getOneEmptyCart()
+        every { cartRepository.addProduct(any(), any(), any()) } returns CartMock.getOneEmptyCartProduct()
 
         // act
         val cart = this.sut.addProduct("1", ProductMock.getOneProductWithTenis().id, 10)

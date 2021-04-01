@@ -1,5 +1,8 @@
 package br.com.dev.shoppingcart.config
 
+import br.com.dev.shoppingcart.domain.database.Database
+import br.com.dev.shoppingcart.domain.database.Database.allProducts
+import br.com.dev.shoppingcart.domain.database.Database.allProductsCart
 import br.com.dev.shoppingcart.domain.repository.CartRepository
 import br.com.dev.shoppingcart.domain.repository.ProductRepository
 import br.com.dev.shoppingcart.domain.service.CartService
@@ -24,8 +27,8 @@ object KoinConfig {
     }
 
     private val repositoriesModules = module {
-        single { CartRepository() }
-        single { ProductRepository() }
+        single { CartRepository(Database.allCarts, allProductsCart, allProducts) }
+        single { ProductRepository(allProducts) }
     }
 
     private val objectMapperModule = module {

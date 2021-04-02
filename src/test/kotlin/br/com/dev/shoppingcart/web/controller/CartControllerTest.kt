@@ -71,7 +71,7 @@ internal class CartControllerTest : BaseTest() {
             )
             .header("Content-Type", "application/json")
             .`when`()
-            .post("carts")
+            .post("cart")
             .then()
             .assertThat()
             .body("user_id", equalTo("1"))
@@ -95,7 +95,7 @@ internal class CartControllerTest : BaseTest() {
             )
             .header("Content-Type", "application/json")
             .`when`()
-            .post("carts")
+            .post("cart")
             .then()
             .assertThat()
             .statusCode(409)
@@ -106,7 +106,7 @@ internal class CartControllerTest : BaseTest() {
     fun `given a request to add a product to a cart must return a cart with products list`() {
         every { cartService.addProduct(any(), any(), any()) } returns CartDTO(
             "1",
-            ProductMock.getListWithOneProduct().map { it.toProductDTO() })
+            ProductMock.getListWithOneProduct().map { it.toProductDTO(0) })
 
         val body = """
                 {

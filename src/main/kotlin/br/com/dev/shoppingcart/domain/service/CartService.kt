@@ -14,8 +14,11 @@ class CartService(private val cartRepository: CartRepository, private val produc
             throw NotFoundResponse("Cart not found!")
         } else {
             CartDTO(
-                it.first().userId,
-                cartRepository.getProductsByCartId(it.first().id).map { product -> product.toProductDTO() })
+                it.first().userId, cartRepository.getProductsByCartId(it.first().id).map { product ->
+                    cartRepository.getQuantityFromCartByIdAndProductId(it.first().id, product.id).let { cartProduct ->
+                        product.toProductDTO(cartProduct?.quantity)
+                    }
+                })
         }
     }
 

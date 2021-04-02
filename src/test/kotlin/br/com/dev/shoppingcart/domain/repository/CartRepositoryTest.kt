@@ -140,7 +140,7 @@ internal class CartRepositoryTest {
     }
 
     @Test
-    fun `when adding a product to a cart if the cart is empty or does not exists must return a new cart`() {
+    fun `when adding a product to a cart if the cart does not exist must return a new cart`() {
         // arrange
         val products = mutableListOf(Product(1, "Tenis", 100.0, "", ""))
         val cartProducts = mutableListOf<CartProduct>()
@@ -163,7 +163,7 @@ internal class CartRepositoryTest {
     fun `when adding a product to a cart if the cart already exists and is empty must return a cart with a new product`() {
         // arrange
         val cart = mutableListOf(Cart(1, "1"))
-        val cartProducts = mutableListOf(CartProduct(1, 1))
+        val cartProducts = mutableListOf<CartProduct>()
         val products = mutableListOf(
             Product(1, "Tenis", 100.0, "", ""),
             Product(2, "Tenis em Promocao", 99.0, "", "")
@@ -178,11 +178,33 @@ internal class CartRepositoryTest {
         assertThat(carts).size().isEqualTo(1)
         assertThat(carts.first().cartId).isEqualTo(1)
 
+        assertThat(cartProducts).size().isEqualTo(1)
+    }
+
+    @Test
+    fun `when adding a product to a cart if the cart already exists and has a different product must return a cart with a new product`() {
+        // arrange
+        val cart = mutableListOf(Cart(1, "1"))
+        val cartProducts = mutableListOf(CartProduct(1, 2, 10))
+        val products = mutableListOf(
+            Product(1, "Tenis", 100.0, "", ""),
+            Product(2, "Tenis em Promocao", 99.0, "", "")
+        )
+        this.cut = CartRepository(cart, cartProducts, products)
+
+        // act
+        val carts = this.cut.addProduct("1", 1, 5)
+
+        // assert
+        assertThat(carts).isNotEmpty
+        assertThat(carts).size().isEqualTo(1)
+        assertThat(carts.first().cartId).isEqualTo(1)
+
         assertThat(cartProducts).size().isEqualTo(2)
     }
 
     @Test
-    fun `when adding a product to a cart if the cart already exists and has the same product that is being added must return a cart product quantity updated`() {
+    fun `when adding a product to a cart if the cart already exists and has the same product that is being added must return the quantity updated`() {
         // arrange
         val cart = mutableListOf(Cart(1, "1"))
         val cartProducts = mutableListOf(CartProduct(1, 1, 2))
@@ -205,7 +227,7 @@ internal class CartRepositoryTest {
     }
 
     @Test
-    fun `when adding a product to a cart if the cart already exists but is empty then must return a cart product quantity updated`() {
+    fun `when adding a product to a cart if the cart already exists but is empty then must return the quantity informed`() {
         // arrange
         val cart = mutableListOf(Cart(1, "1"))
         val cartProducts = mutableListOf<CartProduct>()
@@ -225,5 +247,49 @@ internal class CartRepositoryTest {
 
         assertThat(cartProducts).size().isEqualTo(1)
         assertThat(cartProducts.first().quantity).isEqualTo(5)
+    }
+
+    @Test
+    fun `given an existing cart id and product id must return a cart with a product`() {
+        // arrange
+        val cartProducts = mutableListOf(CartProduct(1, 1, 2))
+
+        this.cut = CartRepository(mutableListOf(), cartProducts, mutableListOf())
+
+        // act
+        val cartProduct = this.cut.getQuantityFromCartByIdAndProductId(1, 1)
+
+        // assert
+        assertThat(cartProduct).isNotNull
+        assertThat(cartProduct!!.cartId).isEqualTo(1)
+        assertThat(cartProduct.productID).isEqualTo(1)
+    }
+
+    @Test
+    fun `given a non existing cart id must return a cart with a product`() {
+        // arrange
+        val cartProducts = mutableListOf(CartProduct(1, 1, 2))
+
+        this.cut = CartRepository(mutableListOf(), cartProducts, mutableListOf())
+
+        // act
+        val cartProduct = this.cut.getQuantityFromCartByIdAndProductId(10, 1)
+
+        // assert
+        assertThat(cartProduct).isNull()
+    }
+
+    @Test
+    fun `given a non existing product id must return a cart with a product`() {
+        // arrange
+        val cartProducts = mutableListOf(CartProduct(1, 1, 2))
+
+        this.cut = CartRepository(mutableListOf(), cartProducts, mutableListOf())
+
+        // act
+        val cartProduct = this.cut.getQuantityFromCartByIdAndProductId(1, 10)
+
+        // assert
+        assertThat(cartProduct).isNull()
     }
 }

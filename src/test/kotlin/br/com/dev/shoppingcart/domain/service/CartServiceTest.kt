@@ -1,5 +1,6 @@
 package br.com.dev.shoppingcart.domain.service
 
+import br.com.dev.shoppingcart.domain.model.CartProduct
 import br.com.dev.shoppingcart.domain.repository.CartRepository
 import br.com.dev.shoppingcart.domain.repository.ProductRepository
 import br.com.dev.shoppingcart.mocks.CartMock
@@ -36,6 +37,7 @@ internal class CartServiceTest {
     fun `given an user id must return a cart`() {
         // arrange
         every { cartRepository.getCartByUserId(any()) } returns CartMock.getOneEmptyCart()
+        every { cartRepository.getQuantityFromCartByIdAndProductId(any(), any()) } returns CartProduct(1, 1)
         every { cartRepository.getProductsByCartId(any()) } returns ProductMock.getListWithOneProduct()
 
         // act

@@ -57,7 +57,7 @@ class ProductControllerTest : BaseTest() {
             .body(body)
             .header("Content-Type", "application/json")
             .`when`()
-            .post("products")
+            .post("product")
             .then()
             .assertThat()
             .body("name", equalTo("Camiseta"))

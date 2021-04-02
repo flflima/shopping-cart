@@ -1,0 +1,202 @@
+openapi: 3.0.1
+info:
+  title: Shopping Cart
+  description: An imaginary cart application
+  version: '3.0.0'
+tags:
+  - name: cart
+    description: Operations in a cart
+  - name: product
+    description: Operations in a product
+paths:
+  /cart:
+    post:
+      tags:
+        - cart
+      summary: Creates a new cart with an empty list of products
+      operationId: postCarts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCart'
+        required: true
+      responses:
+        201:
+          description: Cart created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        404:
+          description: User not found
+        409:
+          description: Cart already exists
+  /cart/user/{user-id}:
+    get:
+      tags:
+        - cart
+      summary: Get a cart user by an user id
+      operationId: getCartUserWithUserId
+      parameters:
+        - name: user-id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Cart found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        404:
+          description: Cart not found
+  /cart/user/{user-id}/products:
+    post:
+      tags:
+        - cart
+      summary: Post cart user with userId products
+      operationId: postCartUserWithUserIdProducts
+      parameters:
+        - name: user-id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The product and quantity to be added to a cart
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddProduct'
+      responses:
+        201:
+          description: Product added to the cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        404:
+          description: Cart not found
+  /product:
+    post:
+      tags:
+        - product
+      summary: Create a new products
+      operationId: postProducts
+      requestBody:
+        description: The product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+      responses:
+        201:
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /product/{product-id}:
+    get:
+      tags:
+        - product
+      summary: Get a product by product id
+      operationId: getProductWithProductId
+      parameters:
+        - name: product-id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        404:
+          description: Product not found
+components:
+  schemas:
+    CreateCart:
+      type: object
+      properties:
+        user_id:
+          description: The user id
+          type: string
+          format: number
+          example: 1
+    Cart:
+      type: object
+      properties:
+        user_id:
+          description: The user id
+          type: string
+          format: number
+          example: 1
+        products:
+          description: List of products in the cart
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    Product:
+      type: object
+      properties:
+        id:
+          description: The product id
+          type: number
+          example: 1
+        name:
+          description: The name of the product
+          type: string
+          example: Sneakers
+        price:
+          description: The price of the product
+          type: number
+          example: 199.99
+        description:
+          description: The description of the product
+          type: string
+          example: A blue sneaker
+        category:
+          description: The category of the product
+          type: string
+          example: Clothes
+        quantity:
+          description: The total of items in the cart
+          type: integer
+          example: 1
+    CreateProduct:
+      type: object
+      properties:
+        name:
+          description: The name of the product
+          type: string
+          example: Sneakers
+        price:
+          description: The price of the product
+          type: number
+          example: 199.99
+        description:
+          description: The description of the product
+          type: string
+          example: A blue sneaker
+        category:
+          description: The category of the product
+          type: string
+          example: Clothes
+    AddProduct:
+      type: object
+      properties:
+        id:
+          description: The product id
+          type: number
+          example: 1
+        quantity:
+          description: The total of items to be added
+          type: integer
+          example: 1

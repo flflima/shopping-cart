@@ -12,11 +12,9 @@ class Router(private val cartController: CartController, private val productCont
     fun configure(server: Javalin) {
         server.apply {
             this.routes {
-                path("carts") {
-                    post(cartController::createCart)
-                }
-
                 path("cart") {
+                    post(cartController::createCart)
+
                     path("user/:user-id") {
                         get(cartController::getCart)
 
@@ -26,11 +24,9 @@ class Router(private val cartController: CartController, private val productCont
                     }
                 }
 
-                path("products") {
-                    post(productController::createProduct)
-                }
-
                 path("product") {
+                    post(productController::createProduct)
+
                     path(":product-id") {
                         get(productController::getProduct)
                     }

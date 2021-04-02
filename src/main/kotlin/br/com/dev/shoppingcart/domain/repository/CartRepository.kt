@@ -12,6 +12,9 @@ class CartRepository(
 
     fun getCartByUserId(userId: String): List<Cart> = carts.filter { it.userId == userId }
 
+    fun getQuantityFromCartByIdAndProductId(cartId: Long, productId: Long): CartProduct? =
+        cartProducts.firstOrNull { it.cartId == cartId && it.productID == productId }
+
     fun getProductsByCartId(cartId: Long): List<Product> =
         cartProducts.filter { it.cartId == cartId }
             .flatMap { productCart -> products.filter { it.id == productCart.productID } }
@@ -35,17 +38,21 @@ class CartRepository(
 
     fun addProduct(userId: String, productId: Long, quantity: Int): List<CartProduct> =
         getCartByUserId(userId).let {
-            if (it.isEmpty()) {
-                createCart(userId, productId, quantity)
+            return if (it.isEmpty()) {
+                val createCart = createCart(userId, productId, quantity)
+                cartProducts.filter { cartProduct -> createCart.first().id == cartProduct.cartId && cartProduct.productID == productId }
             } else {
-                if (cartProducts.none { c -> c.productID == productId }) {
+                if (cartProducts.any { c -> it.first().id == c.cartId && c.productID == productId }) {
+                    cartProducts.forEach { cartProduct -> cartProduct.addQuantity(quantity) }
+                } else {
+                    if (cartProducts.none { c -> it.first().id == c.cartId }) {
+                        createCart(userId, productId, quantity)
+                    }
                     val cartProduct = CartProduct(it.first().id, productId, quantity)
                     cartProducts.add(cartProduct)
-                } else {
-                    cartProducts.forEach { cartProduct -> cartProduct.addQuantity(quantity) }
                 }
+                cartProducts.filter { cartProduct -> it.first().id == cartProduct.cartId && cartProduct.productID == productId }
             }
-            return cartProducts.filter { cartProduct -> cartProduct.productID == productId }
         }
 
 }

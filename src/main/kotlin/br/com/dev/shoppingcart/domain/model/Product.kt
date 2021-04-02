@@ -10,7 +10,7 @@ data class Product(
     val category: String
 )
 
-fun Product.toProductDTO(quantity: Int = 0) =
+fun Product.toProductDTO(quantity: Int? = null) =
     ProductDTO(
         id = this.id,
         name = this.name,

@@ -27,7 +27,7 @@ object App : KoinComponent {
         JavalinJackson.configure(objectMapper)
         server = Javalin.create {
             it.addStaticFiles("/swagger")
-            it.addSinglePageRoot("","/swagger/index.html")
+            it.addSinglePageRoot("","/swagger/swagger-ui.html")
             it.server {
                 Server(8000)
             }

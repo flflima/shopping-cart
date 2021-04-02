@@ -13,10 +13,6 @@ A simple REST application with Kotlin
 - [JaCoCo](https://www.jacoco.org/jacoco/trunk/doc/)
 - [Swagger](https://swagger.io/)
 
-## Application's Swagger
-
-http://localhost:8000/index.html
-
 ## Building Application
 
 ```console
@@ -36,6 +32,10 @@ Minimum coverage is 80%, and report in _build/jacocoHtml/index.html_
 ```console
 java -jar build/libs/shopping-cart-<version>.jar
 ```
+
+## Application's Swagger
+
+http://localhost:8000/swagger-ui.html
 
 ## Operations
 

@@ -11,6 +11,11 @@ A simple REST application with Kotlin
 - [AssertJ](https://joel-costigliola.github.io/assertj/index.html)
 - [Koin](https://insert-koin.io/)
 - [JaCoCo](https://www.jacoco.org/jacoco/trunk/doc/)
+- [Swagger](https://swagger.io/)
+
+## Application's Swagger
+
+http://localhost:8000/index.html
 
 ## Building Application
 
@@ -37,55 +42,101 @@ java -jar build/libs/shopping-cart-<version>.jar
 Create a cart associated to a user
 
 ```curl
-curl --request POST 'localhost:8000/carts' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "user_id": "123"
+curl -X 'POST' \
+  'http://localhost:8000/cart' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "user_id": "123"
 }'
-
-{"user_id":"123","products":[]}
+```
+```curl
+{
+  "user_id": "123",
+  "products": []
+}
 ```
 
 Get a cart associated to a user
 
 ```curl
-curl 'localhost:8000/cart/123' 
-
-{"user_id":"123","products":[]}
+curl -X 'GET' \
+  'http://localhost:8000/cart/user/123' \
+  -H 'accept: application/json'
+```
+```curl
+{
+  "user_id": "123",
+  "products": []
+}
 ```
 
 Add a product to a cart 
 
 ```curl
-curl --request POST 'localhost:8000/cart/123/products' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "id": 4,
-    "quantity": 1
+curl -X 'POST' \
+  'http://localhost:8000/cart/user/123/products' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 1,
+  "quantity": 1
 }'
-
-{"id":"4","products":[{"name":"Sneakers","price":99.99,"description":"","category":"Clothing","quantity":1}]}
+```
+```curl
+{
+  "user_id": "123",
+  "products": [
+    {
+      "id": 1,
+      "name": "Shorts",
+      "price": 55,
+      "description": "",
+      "category": "Clothes",
+      "quantity": 1
+    }
+  ]
+}
 ```
 
 Create a product
 
 ```curl
-curl --request POST 'localhost:8000/products' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "name": "Sneakers",
-    "price": 99.99,
-    "description": "",
-    "category": "Clothing"
+curl -X 'POST' \
+  'http://localhost:8000/product' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Sneakers",
+  "price": 199.99,
+  "description": "A blue sneaker",
+  "category": "Clothes"
 }'
-
-{"id":4,"name":"Sneakers","price":99.99,"description":"","category":"Clothing"}
 ```
+```curl
+{
+  "id": 4,
+  "name": "Sneakers",
+  "price": 199.99,
+  "description": "A blue sneaker",
+  "category": "Clothes"
+}
+```
+
 
 Get a product by id
 
 ```curl
-curl 'localhost:8000/product/4' 
-
-{"name":"Sneakers","price":99.99,"description":"","category":"Clothing"}
+curl -X 'GET' \
+  'http://localhost:8000/product/4' \
+  -H 'accept: application/json'
+```
+```curl
+{
+  "id": 4,
+  "name": "Sneakers",
+  "price": 199.99,
+  "description": "A blue sneaker",
+  "category": "Clothes"
+}
 ```

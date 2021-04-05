@@ -27,6 +27,15 @@ A simple REST application with Kotlin
 
 Minimum coverage is 80%, and report in _build/jacocoHtml/index.html_
 
+## Running Sonarqube locally
+
+```console
+./gradlew clean test sonarqube \
+  -Dsonar.projectKey=<<your-project-key-configured>> \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=<<the-login>>
+```
+
 ## Running Application
 
 ```console

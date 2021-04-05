@@ -2,11 +2,12 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.31'
     id 'application'
     id 'jacoco'
+    id "org.sonarqube" version "3.0"
 }
 
 mainClassName = 'br.com.dev.shoppingcart.AppKt'
 group = 'br.com.dev'
-version = '3.0.0'
+version = '3.0.1'
 
 repositories {
     mavenCentral()
@@ -66,15 +67,23 @@ jacoco {
     toolVersion = "0.8.6"
 }
 
+def coverageExclusions = [
+        '**/br/com/dev/shoppingcart/config/*',
+        '**/br/com/dev/shoppingcart/App*',
+        '**/br/com/dev/shoppingcart/domain/model/*',
+        '**/br/com/dev/shoppingcart/web/dto/*',
+        '**/br/com/dev/shoppingcart/domain/database/*'
+]
+
 jacocoTestReport {
     reports {
-        xml.enabled false
+        xml.enabled true
         csv.enabled false
         html.destination file("${buildDir}/jacocoHtml")
     }
 
     afterEvaluate {
-        excludeFiles(classDirectories)
+        excludeFiles(classDirectories, coverageExclusions)
     }
 }
 
@@ -82,7 +91,6 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                enabled = true
                 counter = 'BRANCH'
                 value = 'COVEREDRATIO'
                 minimum = 0.8
@@ -91,29 +99,28 @@ jacocoTestCoverageVerification {
     }
 
     afterEvaluate {
-        excludeFiles(classDirectories)
+        excludeFiles(classDirectories, coverageExclusions)
     }
 }
 
-private excludeFiles(classDirectories) {
+private excludeFiles(classDirectories, coverageExclusions) {
     classDirectories.setFrom(files(classDirectories.files.collect {
-        fileTree(dir: it, exclude: ['br/com/dev/shoppingcart/config/**',
-                                    'br/com/dev/shoppingcart/App**',
-                                    'br/com/dev/shoppingcart/domain/model/**',
-                                    'br/com/dev/shoppingcart/web/dto/**',
-                                    'br/com/dev/shoppingcart/domain/database/**'])
+        fileTree(dir: it, exclude: coverageExclusions)
     }))
+}
+
+sonarqube {
+    properties {
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/*.xml"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.exclusions", coverageExclusions
+    }
 }
 
 test {
     finalizedBy jacocoTestReport
 }
 
-jacocoTestReport {
-    dependsOn test
-    finalizedBy jacocoTestCoverageVerification
-}
-
-jacocoTestCoverageVerification {
-    dependsOn jacocoTestReport
+check {
+    dependsOn jacocoTestCoverageVerification
 }
